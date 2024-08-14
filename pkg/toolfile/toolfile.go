@@ -6,8 +6,8 @@ import (
 	"os"
 )
 
-// CreateTempFile creates a temporary file and returns its name.
-func CreateTempFile(prefix string) (string, error) {
+// CreateTemp creates a temporary file and returns its name.
+func CreateTemp(prefix string) (string, error) {
 	// Create a temporary file in the default directory
 	tempFile, err := os.CreateTemp("", prefix+"-*.tmp")
 	if err != nil {
