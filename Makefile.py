@@ -43,7 +43,7 @@ else:
 """
 git add .
 git commit -m "Initial commit"
-git tag v1.0.0-beta
+git tag "$(cat VERSION)"
 
 """
 
