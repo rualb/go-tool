@@ -40,7 +40,12 @@ else:
 
 
 
+"""
+git add .
+git commit -m "Initial commit"
+git tag v1.0.0-beta
 
+"""
 
 
 #BINARY_NAME = "app.exe" if os.name == "nt" else "app"
