@@ -1,5 +1,7 @@
 package toolhttp
 
+//TODO gzip-encoded-content
+
 import (
 	"encoding/json"
 	"fmt"
