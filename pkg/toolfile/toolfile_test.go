@@ -5,8 +5,8 @@ import (
 	"testing"
 )
 
-func TestGetTempFile(t *testing.T) {
-	filename, err := GetTempFile("test")
+func TestCreateTempFile(t *testing.T) {
+	filename, err := CreateTempFile("test")
 	if err != nil {
 		t.Fatalf("Failed to create temp file: %v", err)
 	}
@@ -18,7 +18,7 @@ func TestGetTempFile(t *testing.T) {
 }
 
 func TestDelete(t *testing.T) {
-	filename, err := GetTempFile("test")
+	filename, err := CreateTempFile("test")
 	if err != nil {
 		t.Fatalf("Failed to create temp file: %v", err)
 	}
@@ -35,7 +35,7 @@ func TestDelete(t *testing.T) {
 }
 
 func TestRename(t *testing.T) {
-	oldPath, err := GetTempFile("testrename")
+	oldPath, err := CreateTempFile("testrename")
 	if err != nil {
 		t.Fatalf("Failed to create temporary file: %v", err)
 	}
@@ -60,7 +60,7 @@ func TestRename(t *testing.T) {
 }
 
 func TestExists(t *testing.T) {
-	filename, err := GetTempFile("test")
+	filename, err := CreateTempFile("test")
 	if err != nil {
 		t.Fatalf("Failed to create temp file: %v", err)
 	}
@@ -76,7 +76,7 @@ func TestExists(t *testing.T) {
 }
 
 func TestWriteAllText(t *testing.T) {
-	filename, err := GetTempFile("test")
+	filename, err := CreateTempFile("test")
 	if err != nil {
 		t.Fatalf("Failed to create temp file: %v", err)
 	}
@@ -99,7 +99,7 @@ func TestWriteAllText(t *testing.T) {
 }
 
 func TestWriteBytes(t *testing.T) {
-	filename, err := GetTempFile("test")
+	filename, err := CreateTempFile("test")
 	if err != nil {
 		t.Fatalf("Failed to create temp file: %v", err)
 	}
@@ -122,7 +122,7 @@ func TestWriteBytes(t *testing.T) {
 }
 
 func TestAppendText(t *testing.T) {
-	filename, err := GetTempFile("test")
+	filename, err := CreateTempFile("test")
 	if err != nil {
 		t.Fatalf("Failed to create temp file: %v", err)
 	}
@@ -152,7 +152,7 @@ func TestAppendText(t *testing.T) {
 }
 
 func TestReadAllLines(t *testing.T) {
-	filename, err := GetTempFile("test")
+	filename, err := CreateTempFile("test")
 	if err != nil {
 		t.Fatalf("Failed to create temp file: %v", err)
 	}

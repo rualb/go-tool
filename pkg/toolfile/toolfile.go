@@ -7,7 +7,7 @@ import (
 )
 
 // CreateTempFile creates a temporary file and returns its name.
-func GetTempFile(prefix string) (string, error) {
+func CreateTempFile(prefix string) (string, error) {
 	// Create a temporary file in the default directory
 	tempFile, err := os.CreateTemp("", prefix+"-*.tmp")
 	if err != nil {
