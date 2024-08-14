@@ -1,6 +1,7 @@
 package toolhttp
 
 //TODO gzip-encoded-content
+//TODO as http-client with config(gzip,baseurl,headers)
 
 import (
 	"encoding/json"
