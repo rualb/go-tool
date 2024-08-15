@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestMinimize(t *testing.T) {
+func TestEllipses(t *testing.T) {
 	tests := []struct {
 		str    string
 		maxLen int
@@ -20,9 +20,9 @@ func TestMinimize(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.str, func(t *testing.T) {
-			got := Minimize(tt.str, tt.maxLen)
+			got := Ellipses(tt.str, tt.maxLen)
 			if got != tt.want {
-				t.Errorf("Minimize(%q, %d) = %q; want %q", tt.str, tt.maxLen, got, tt.want)
+				t.Errorf("Ellipses(%q, %d) = %q; want %q", tt.str, tt.maxLen, got, tt.want)
 			}
 		})
 	}
