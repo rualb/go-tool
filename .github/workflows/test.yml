@@ -20,6 +20,5 @@ jobs:
     - name: Test
       run: |
         echo "Testing..."
-        make test
         go test ./...
 
