@@ -1,7 +1,7 @@
 package main
 
 import (
-	_ "github.com/rualb/go-tools/pkg/toolmath"
+	_ "github.com/rualb/go-tool/toolmath"
 )
 
 func main() {

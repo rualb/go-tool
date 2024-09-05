@@ -1,4 +1,4 @@
-module github.com/rualb/go-tools
+module github.com/rualb/go-tool
 
 go 1.22.2
 
