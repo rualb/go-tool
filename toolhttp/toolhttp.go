@@ -1,14 +1,13 @@
 package toolhttp
 
-//TODO gzip-encoded-content
-//TODO as http-client with config(gzip,baseurl,headers)
+// TODO gzip-encoded-content
+// TODO as http-client with config(gzip,baseurl,headers)
 
 /*
 !!! If you want to use generics at the struct level, which is more advanced but allows more flexibility, you would need to define the struct itself as generic:
 */
 import (
 	"bytes"
-	"cmp"
 	"compress/gzip"
 	"encoding/json"
 	"fmt"
@@ -20,29 +19,24 @@ import (
 
 type StrMap = map[string]string
 
-type HttpClient struct {
-	BaseURL     string
-	QueryParams StrMap
-	ContentType string
-}
-
-// URLEncode encodes a string for safe inclusion in a URL query.
-func URLEncode(input string) string {
+// EncodeURL encodes a string for safe inclusion in a URL query.
+func EncodeURL(input string) string {
 	return url.QueryEscape(input)
+
 }
 
 // URLEncode encodes a string for safe inclusion in a URL query.
-func JoinURL(pBaseURL string, pQueryParams StrMap) (string, error) {
-	parsedURL, err := url.Parse(pBaseURL)
+func JoinURL(baseURL string, queryParams StrMap) (string, error) {
+	parsedURL, err := url.Parse(baseURL)
 	if err != nil {
 		return "", fmt.Errorf("invalid base URL: %v", err)
 	}
 
-	if pQueryParams != nil {
+	if queryParams != nil {
 
 		// Add query parameters from the map
 		query := url.Values{}
-		for key, value := range pQueryParams {
+		for key, value := range queryParams {
 			query.Add(key, value)
 		}
 		parsedURL.RawQuery = query.Encode()
@@ -96,15 +90,15 @@ func readBodyAllBytes(resp *http.Response) ([]byte, error) {
 	return data, err
 }
 
-func tryGetBytes(body any) (bodyData []byte, contentType string, err error) {
+func tryGetBytes(reqBody any) (bodyData []byte, contentType string, err error) {
 	bodyData = nil
 	contentType = ""
 
-	if body == nil {
+	if reqBody == nil {
 		return bodyData, contentType, nil
 	}
 
-	switch v := body.(type) {
+	switch v := reqBody.(type) {
 	case string:
 		bodyData = []byte(v)
 		contentType = "text/plain"
@@ -123,31 +117,41 @@ func tryGetBytes(body any) (bodyData []byte, contentType string, err error) {
 
 }
 
-// HttpGetBinary makes an HTTP GET request to the specified client.BaseURL with query parameters from client.QueryParams
+// HttpGetBinary makes an HTTP GET request to the specified opt.BaseURL with query parameters from opt.QueryParams
 // and returns the binary data from the response.
-func GetBytes(client *HttpClient, body any) ([]byte, error) {
+func GetBytes(baseURL string, queryParams StrMap, reqBody any) ([]byte, error) {
 
 	var resp *http.Response
-
-	urlStr, err := JoinURL(client.BaseURL, client.QueryParams)
+	// G107: Potential HTTP request made with variable url
+	fullURL, err := JoinURL(baseURL, queryParams)
 	if err != nil {
 		return nil, fmt.Errorf("invalid URL: %v", err)
 	}
 
-	bodyData, contentType, err := tryGetBytes(body)
+	parsedURL, err := url.Parse(fullURL)
+	if err != nil || parsedURL.Scheme == "" || parsedURL.Host == "" {
+		return nil, fmt.Errorf("invalid URL: %s", fullURL)
+	}
+
+	fullURL = parsedURL.String()
+
+	bodyData, contentType, err := tryGetBytes(reqBody)
 	if err != nil {
 		return nil, err
 	}
 
+	// Potential HTTP request made with variable url
 	if bodyData != nil {
 		// Make the POST request
-		resp, err = http.Post(urlStr, cmp.Or(client.ContentType, contentType), bytes.NewBuffer(bodyData))
+		//nolint:G107
+		resp, err = http.Post(fullURL, contentType, bytes.NewBuffer(bodyData)) //nolint:G107
 		if err != nil {
 			return nil, fmt.Errorf("failed to make GET request: %v", err)
 		}
 	} else {
 		// Make the GET request
-		resp, err = http.Get(urlStr)
+		//nolint:G107
+		resp, err = http.Get(fullURL) //nolint:G107
 		if err != nil {
 			return nil, fmt.Errorf("failed to make GET request: %v", err)
 		}
@@ -167,9 +171,9 @@ func GetBytes(client *HttpClient, body any) ([]byte, error) {
 	return data, nil
 }
 
-func GetJSON[T any](client *HttpClient, body any) (T, error) {
+func GetJSON[T any](baseURL string, queryParams StrMap, reqBody any) (T, error) {
 
-	data, err := GetBytes(client, body)
+	data, err := GetBytes(baseURL, queryParams, reqBody)
 
 	res := new(T)
 
@@ -189,9 +193,9 @@ func GetJSON[T any](client *HttpClient, body any) (T, error) {
 	return *res, nil
 }
 
-func GetText(client *HttpClient, body any) (string, error) {
+func GetText(baseURL string, queryParams StrMap, reqBody any) (string, error) {
 
-	data, err := GetBytes(client, body)
+	data, err := GetBytes(baseURL, queryParams, reqBody)
 
 	if err != nil {
 		return "", err

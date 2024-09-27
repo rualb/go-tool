@@ -1,0 +1,47 @@
+
+linters:
+  disable-all: true
+  enable:
+    - staticcheck
+    #- revive
+    - govet
+    - unconvert
+    - unused
+    - gosec
+    - gocyclo
+    - dupl
+    - misspell
+    - unparam
+    - typecheck
+    - ineffassign
+    - stylecheck
+    - gochecknoinits
+    - exportloopref
+    - gocritic
+    - nakedret
+    - gosimple
+    - prealloc
+  fast: false
+
+issues:
+  exclude-dirs:
+    - test
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - errcheck
+        - gosec
+    - text: "ST1000: at least one file in a package should have a package comment"
+      linters:
+        - stylecheck
+    - text: "ST1020: comment on exported function"
+      linters:
+        - stylecheck
+    - text: "G107: Potential HTTP request made with variable url"
+      path: "toolhttp.go"
+      linters:
+        - gosec
+  exclude-use-default: false
+
+run:
+  timeout: 5m

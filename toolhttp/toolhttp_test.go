@@ -68,9 +68,8 @@ func TestGetBytes(t *testing.T) {
 		"message": message,
 	}
 
-	httpClient := HttpClient{server.URL + "/bytes", args, ""}
 	// Call the function
-	data, err := GetBytes(&httpClient, nil)
+	data, err := GetBytes(server.URL+"/bytes", args, nil)
 	if err != nil {
 		t.Fatalf("GetBytes() error = %v", err)
 	}
@@ -93,10 +92,10 @@ func TestGetJSON(t *testing.T) {
 	type resultType struct {
 		Message string `json:"message"`
 	}
-	httpClient := HttpClient{server.URL + "/json", args, ""}
+
 	// Call the function
 	var result resultType
-	result, err := GetJSON[resultType](&httpClient, nil)
+	result, err := GetJSON[resultType](server.URL+"/json", args, nil)
 	if err != nil {
 		t.Fatalf("GetJSON() error = %v", err)
 	}
@@ -115,10 +114,10 @@ func TestGetJSON_POST(t *testing.T) {
 	type resultType struct {
 		Message string `json:"message"`
 	}
-	httpClient := HttpClient{server.URL + "/json_post", nil, ""}
+
 	// Call the function
 	var result resultType
-	result, err := GetJSON[resultType](&httpClient, &StrMap{"message": message})
+	result, err := GetJSON[resultType](server.URL+"/json_post", nil, &StrMap{"message": message})
 	if err != nil {
 		t.Fatalf("GetJSON() error = %v", err)
 	}
@@ -137,9 +136,8 @@ func TestGetText(t *testing.T) {
 		"message": message,
 	}
 
-	httpClient := HttpClient{server.URL + "/bytes", args, ""}
 	// Call the function
-	result, err := GetText(&httpClient, nil)
+	result, err := GetText(server.URL+"/bytes", args, nil)
 	if err != nil {
 		t.Fatalf("GetText() error = %v", err)
 	}

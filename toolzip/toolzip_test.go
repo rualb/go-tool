@@ -20,7 +20,7 @@ func TestZipUnZip(t *testing.T) {
 	}
 
 	// Unzip the archive
-	unzippedFiles, err := UnZip(zipData)
+	unzippedFiles, err := UnZip(zipData, 0)
 	if err != nil {
 		t.Fatalf("UnZip() error = %v", err)
 	}
@@ -53,7 +53,7 @@ func TestZipEmpty(t *testing.T) {
 	}
 
 	// Unzip the archive to check if it is empty
-	unzippedFiles, err := UnZip(zipData)
+	unzippedFiles, err := UnZip(zipData, 0)
 	if err != nil {
 		t.Fatalf("UnZip() error = %v", err)
 	}
@@ -67,7 +67,7 @@ func TestZipEmpty(t *testing.T) {
 func TestZipInvalidData(t *testing.T) {
 	invalidData := []byte("invalid zip data")
 
-	_, err := UnZip(invalidData)
+	_, err := UnZip(invalidData, 0)
 	if err == nil {
 		t.Error("UnZip() expected error, got nil")
 	}

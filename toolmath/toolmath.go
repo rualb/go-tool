@@ -5,7 +5,7 @@ import "cmp"
 // Max returns the maximum of two values that satisfy the cmp.Ordered constraint.
 func Max[T cmp.Ordered](values ...T) T {
 	if len(values) == 0 {
-		var zero T  //In Go, for all numeric types, the default value is 0, for boolean it's false, and for strings, it's an empty string (“”)
+		var zero T  // In Go, for all numeric types, the default value is 0, for boolean it's false, and for strings, it's an empty string (“”)
 		return zero // Return zero value for the type if no values are provided
 	}
 

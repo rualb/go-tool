@@ -9,7 +9,18 @@ import (
 
 // UnZip extracts the contents of a zip archive and returns a map
 // where the keys are filenames and the values are the file contents as []byte.
-func UnZip(data []byte) (map[string][]byte, error) {
+func UnZip(data []byte, maxFileSize int) (map[string][]byte, error) {
+
+	// DoS vulnerability via decompression bomb
+
+	if maxFileSize == 0 {
+		maxFileSize = 25 * 1000 * 1000 // 25mb
+	}
+
+	if len(data) > maxFileSize {
+		return nil, fmt.Errorf("error data too big %v max size %v", len(data), maxFileSize)
+	}
+
 	// Create a reader from the zip data
 	reader := bytes.NewReader(data)
 
@@ -33,7 +44,11 @@ func UnZip(data []byte) (map[string][]byte, error) {
 
 		// Read the file contents
 		buf := new(bytes.Buffer)
-		if _, err := io.Copy(buf, f); err != nil {
+
+		// G110: Potential DoS vulnerability via decompression bomb
+
+		limitedReader := io.LimitReader(f, int64(maxFileSize))
+		if _, err := io.Copy(buf, limitedReader); err != nil {
 			return nil, fmt.Errorf("failed to read file %s: %w", file.Name, err)
 		}
 

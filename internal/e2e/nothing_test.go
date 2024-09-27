@@ -1,4 +1,4 @@
-package ut
+package e2e
 
 import (
 	"testing"
@@ -8,8 +8,8 @@ import (
 
 func TestNothing(t *testing.T) {
 
-	var a string = "Hello"
-	var b string = "Hello"
+	a := "Hello"
+	b := "Hello"
 
 	assert.Equal(t, a, b, "The two words should be the same.")
 

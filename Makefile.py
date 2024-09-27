@@ -20,6 +20,11 @@ def test():
                , '-timeout=60s', '-count=1', './...']
     subprocess.run(command, env=env) #, "-v"
 
+def lint():
+    print("Linter...")
+    subprocess.run(["golangci-lint ", "run"])
+ 
+ 
 def help():
     print("Usage:")
     print("  python build.py test     - Run test")
@@ -30,6 +35,8 @@ if len(sys.argv) > 1:
     command = sys.argv[1]
     if command == "test":
         test() 
+    elif command == "lint":
+        lint() 
     elif command == "help":
         help() 
     else:

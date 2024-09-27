@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"path/filepath"
 )
 
 // CreateTemp creates a temporary file and returns its name.
@@ -14,14 +15,15 @@ func CreateTemp(prefix string) (string, error) {
 		return "", err
 	}
 	// Ensure the file is deleted when no longer needed
-	//defer os.Remove(tempFile.Name())
+	// defer os.Remove(tempFile.Name())
 	defer tempFile.Close()
 	// Return the file name
 	return tempFile.Name(), nil
 }
 
-func Delete(filepath string) error {
-	err := os.Remove(filepath)
+func Delete(path string) error {
+	path = filepath.Clean(path) // do Abs before
+	err := os.Remove(path)
 
 	// if err == nil {
 	// 	return nil
@@ -37,8 +39,9 @@ func Delete(filepath string) error {
 }
 
 // checks if a file exists at the specified path.
-func Exists(filepath string) bool {
-	info, err := os.Stat(filepath)
+func Exists(path string) bool {
+	path = filepath.Clean(path) // do Abs before
+	info, err := os.Stat(path)
 	if os.IsNotExist(err) {
 		return false
 	}
@@ -46,6 +49,8 @@ func Exists(filepath string) bool {
 }
 
 func Rename(oldPath, newPath string) error {
+	oldPath = filepath.Clean(oldPath) // do Abs before
+	newPath = filepath.Clean(newPath) // do Abs before
 	err := os.Rename(oldPath, newPath)
 	if err != nil {
 		return fmt.Errorf("failed to rename file from %s to %s: %w", oldPath, newPath, err)
@@ -54,8 +59,8 @@ func Rename(oldPath, newPath string) error {
 }
 
 // writes all text to a file.
-func WriteAllText(filepath, text string) error {
-	err := os.WriteFile(filepath, []byte(text), 0644)
+func WriteAllText(file, text string) error {
+	err := os.WriteFile(file, []byte(text), 0600)
 	if err != nil {
 		return err
 	}
@@ -63,8 +68,9 @@ func WriteAllText(filepath, text string) error {
 }
 
 // writes all bytes to a file.
-func WriteBytes(filepath string, data []byte) error {
-	err := os.WriteFile(filepath, data, 0644)
+func WriteBytes(path string, data []byte) error {
+	path = filepath.Clean(path) // do Abs before
+	err := os.WriteFile(path, data, 0600)
 	if err != nil {
 		return err
 	}
@@ -73,9 +79,10 @@ func WriteBytes(filepath string, data []byte) error {
 
 // appends text to a file.
 
-func AppendText(filepath, text string) error {
+func AppendText(path, text string) error {
+	path = filepath.Clean(path)
 	// Open the file for appending; create it if it doesn't exist
-	file, err := os.OpenFile(filepath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	file, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0600)
 	if err != nil {
 		return err
 	}
@@ -89,8 +96,9 @@ func AppendText(filepath, text string) error {
 }
 
 // reads the entire file content as a text string.
-func ReadAllText(filepath string) (string, error) {
-	data, err := os.ReadFile(filepath)
+func ReadAllText(path string) (string, error) {
+	path = filepath.Clean(path)
+	data, err := os.ReadFile(path)
 	if err != nil {
 		return "", err
 	}
@@ -98,8 +106,9 @@ func ReadAllText(filepath string) (string, error) {
 }
 
 // reads the entire file content as a byte array.
-func ReadAllBytes(filepath string) ([]byte, error) {
-	data, err := os.ReadFile(filepath)
+func ReadAllBytes(path string) ([]byte, error) {
+	path = filepath.Clean(path)
+	data, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}
@@ -108,9 +117,10 @@ func ReadAllBytes(filepath string) ([]byte, error) {
 
 // reads the file content line by line.
 
-func ReadAllLines(filepath string) ([]string, error) {
+func ReadAllLines(path string) ([]string, error) {
+	path = filepath.Clean(path)
 	var lines []string
-	file, err := os.Open(filepath)
+	file, err := os.Open(path)
 	if err != nil {
 		return nil, err
 	}

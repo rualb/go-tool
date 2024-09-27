@@ -2,7 +2,7 @@ package toolmath
 
 import (
 	"testing"
-	//toolmath2 "github.com/rualb/go-tool/pkg/toolmath"
+	// toolmath2 "github.com/rualb/go-tool/pkg/toolmath"
 )
 
 func TestMaxInt(t *testing.T) {
