@@ -150,7 +150,7 @@ func GetBytes(baseURL string, queryParams StrMap, reqBody any) ([]byte, error) {
 		}
 	} else {
 		// Make the GET request
-		//nolint:G107
+ 
 		resp, err = http.Get(fullURL) //nolint:G107
 		if err != nil {
 			return nil, fmt.Errorf("failed to make GET request: %v", err)
