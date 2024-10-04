@@ -27,7 +27,7 @@ func UnZip(data []byte, maxFileSize int) (map[string][]byte, error) {
 	// Open the zip archive
 	zipReader, err := zip.NewReader(reader, int64(len(data)))
 	if err != nil {
-		return nil, fmt.Errorf("failed to open zip reader: %w", err)
+		return nil, fmt.Errorf("failed to open zip reader: %v", err)
 	}
 
 	// Initialize the result map
@@ -38,7 +38,7 @@ func UnZip(data []byte, maxFileSize int) (map[string][]byte, error) {
 		// Open the file
 		f, err := file.Open()
 		if err != nil {
-			return nil, fmt.Errorf("failed to open file %s: %w", file.Name, err)
+			return nil, fmt.Errorf("failed to open file %s: %v", file.Name, err)
 		}
 		defer f.Close()
 
@@ -49,7 +49,7 @@ func UnZip(data []byte, maxFileSize int) (map[string][]byte, error) {
 
 		limitedReader := io.LimitReader(f, int64(maxFileSize))
 		if _, err := io.Copy(buf, limitedReader); err != nil {
-			return nil, fmt.Errorf("failed to read file %s: %w", file.Name, err)
+			return nil, fmt.Errorf("failed to read file %s: %v", file.Name, err)
 		}
 
 		// Store the file contents in the result map
@@ -72,20 +72,20 @@ func Zip(files map[string][]byte) ([]byte, error) {
 		// Create a new file in the zip archive
 		zipFile, err := zipWriter.Create(name)
 		if err != nil {
-			return nil, fmt.Errorf("failed to create file %s in zip archive: %w", name, err)
+			return nil, fmt.Errorf("failed to create file %s in zip archive: %v", name, err)
 		}
 
 		// Write the file data to the zip entry
 		_, err = zipFile.Write(data)
 		if err != nil {
-			return nil, fmt.Errorf("failed to write data to file %s: %w", name, err)
+			return nil, fmt.Errorf("failed to write data to file %s: %v", name, err)
 		}
 	}
 
 	// Close the zip writer to flush any remaining data
 	err := zipWriter.Close()
 	if err != nil {
-		return nil, fmt.Errorf("failed to close zip writer: %w", err)
+		return nil, fmt.Errorf("failed to close zip writer: %v", err)
 	}
 
 	// Return the zip data

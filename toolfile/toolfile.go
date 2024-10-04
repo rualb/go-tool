@@ -53,7 +53,7 @@ func Rename(oldPath, newPath string) error {
 	newPath = filepath.Clean(newPath) // do Abs before
 	err := os.Rename(oldPath, newPath)
 	if err != nil {
-		return fmt.Errorf("failed to rename file from %s to %s: %w", oldPath, newPath, err)
+		return fmt.Errorf("failed to rename file from %s to %s: %v", oldPath, newPath, err)
 	}
 	return nil
 }

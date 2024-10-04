@@ -1,26 +1,28 @@
-name: Lint
+name: golangci-lint
 
 on:
-    push:
-      tags:
-      branches:
-    pull_request:
-        
+  push:
+    branches: []
+    tags: []
+  pull_request:
+
+
+
+
 jobs:
-  lint:
+  golangci:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
-          go-version: '~1.23'
-          check-latest: true
-
+          go-version: stable
+          cache: false
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v6
         with:
-          version: latest
+          version: v1.60
           args: --timeout 5m
- 
 
-
+          
