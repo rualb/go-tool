@@ -7,3 +7,6 @@ dist/
 .idea
 *.gpg
 .env
+__*
+*.exe
+VERSION
